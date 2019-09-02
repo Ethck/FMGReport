@@ -7,3 +7,10 @@ in [Azgaar's Fantasy Map Generator](https://azgaar.github.io/Fantasy-Map-Generat
 Currently there is support for the following:
 State data
 Relations data
+
+
+With plans of adding the following:
+Religions
+Provinces
+Cultures
+Markers
