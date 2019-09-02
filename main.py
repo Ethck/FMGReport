@@ -4,12 +4,13 @@ import pandas as pd
 
 #CONSTANTS
 pdf = FPDF()
-CENTER = pdf.w - 2*pdf.l_margin
+EPW = pdf.w - 2*pdf.l_margin
 BAD_LETTERS = ["g", "j", "y", "p"]
 
 #Active Variables
 stateStarts = {}
 pageNum = 0
+
 #FUNCTIONS
 def makeStatePage(state, relations):
 	global pageNum, stateStarts
@@ -20,7 +21,7 @@ def makeStatePage(state, relations):
 	pdf.add_page()
 
 	state_color = h2d(state["Color"])
-	pdf.cell(CENTER, 60, state["State"], align="C")
+	pdf.cell(EPW, 60, state["State"], align="C")
 	pdf.set_draw_color(*state_color)
 
 	if any(badLetter in state["State"] for badLetter in BAD_LETTERS):
@@ -50,6 +51,7 @@ def makeStatePage(state, relations):
 	pageNum = pdf.page_no()
 
 	makeRelationSection(relations[state["State"]], state["State"])
+	makeProvincialSection(state["State"])
 
 def makeRelationSection(relations, curr_state):
 	pdf.set_line_width(1)
@@ -64,12 +66,35 @@ def makeRelationSection(relations, curr_state):
 		if i >= 1:
 			pdf.set_x(8)
 
+		th = pdf.font_size + 1
+
 		if any((badLetter in state) or (badLetter in relations[i]) for badLetter in BAD_LETTERS):
-			pdf.cell(CENTER/4, pdf.font_size + 2, f"{state}", border=1, ln= 0)
-			pdf.cell(CENTER/10, pdf.font_size + 2, f"{relations[i]}", border=1, ln=1)
-		else:
-			pdf.cell(CENTER/4, pdf.font_size, f"{state}", border=1, ln= 0)
-			pdf.cell(CENTER/10, pdf.font_size, f"{relations[i]}", border=1, ln=1)
+			th + 1
+
+		pdf.cell(EPW/4, th, f"{state}", border=1, ln= 0)
+		pdf.cell(EPW/10, th, f"{relations[i]}", border=1, ln=1)
+
+def makeProvincialSection(curr_state):
+	selection = provincesDF.loc[provincesDF["State"] == curr_state]
+	pdf.set_xy(120, 55)
+	pdf.set_font("Times", size=36)
+	pdf.cell(30, 20, "Provinces")
+
+	pdf.set_xy(100, 70)
+	pdf.set_font("Times", size=12)
+	for i in range(len(selection.index)):
+		th = pdf.font_size + 1
+		pdf.set_x(90)
+		row = selection.iloc[[i]].to_numpy()[0]
+		pdf.set_draw_color(*h2d(row[4]))
+
+		if any((badLetter in row[2]) for badLetter in BAD_LETTERS):
+			th += 1
+
+		pdf.cell(EPW/4, th, f"{row[2]} of {row[1]}", 1, 0)
+		pdf.cell(EPW/8, th, f"Area: {row[6]}", 1, 0)
+		pdf.cell(EPW/4, th, f"Pop.: {row[7]}", 1, 2)
+
 
 
 #MAIN
@@ -78,6 +103,8 @@ pdf.set_font("Times", size=12)
 relationsDF = pd.read_csv("data/state_relations_data_test.csv")
 relationsDF = relationsDF.sort_values(by = "Target")
 stateNames = relationsDF['Target'].tolist()
+
+provincesDF = pd.read_csv("data/provinces_data_test.csv")
 
 states = pd.read_csv("data/states_data_test.csv")
 states.drop(states.tail(1).index, inplace=True)
