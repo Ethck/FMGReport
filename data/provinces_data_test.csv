@@ -1,0 +1,158 @@
+Id,Province,Form,State,Color,Capital,Area mi2,Population
+1,Jilid,County,Moria,#dd6caa,Stasker,9765,219311
+2,Sodogende,County,Moria,#ff608c,Sodogende,4977,138629
+3,Gogardur,County,Moria,#ff4ca6,Gogardur,5382,112608
+4,Haiqian,County,Moria,#ff6b8c,Prestad,13977,284311
+5,Elvelavo,County,Moria,#dd6ea7,Elvelavo,18837,383143
+6,Nausbotn,County,Moria,#f57495,Nausbotn,468,16896
+7,Moch,County,Prussia,#764dc5,Moch,17208,370341
+8,Danguk,County,Prussia,#9b4daf,Kefting,31833,307319
+9,Lautochen,County,Prussia,#9b4bb3,Lautochen,29862,340090
+10,Igeroyra,County,Prussia,#9b4daf,Igeroyra,18324,196212
+11,Ingyeonguk,County,Prussia,#7252c8,Maxzellin,24579,390309
+12,Hwasanguk,County,Prussia,#6c5bc9,Idals,4428,120201
+13,Jinguk,County,Prussia,#975fa1,Trimeltach,486,22565
+14,Hyanguk,County,Prussia,#9b4fab,Brauga,31392,298528
+15,Sorhofn,County,Prussia,#8b6ca8,Sorhofn,7992,191800
+16,Heldeloy,County,Prussia,#6b6db8,Heldeloy,42831,402844
+17,Friegen,County,Prussia,#8e46be,Friegen,38430,677020
+18,Silmenduos,County,Prussia,#6961c6,Silmenduos,3492,60123
+19,Tsurawa,Margrave,Eight Peaks,#ffa939,Satonmajdumeg,10440,230939
+20,Namokuei,County,Eight Peaks,#ff9c43,Everevelek,21267,218654
+21,Tsu,Margrave,Eight Peaks,#ffbb3f,Vevizsa Kis,4914,97973
+22,Veresz,Margrave,Eight Peaks,#fd9455,Veresz,8559,157302
+23,Kapoldoros,County,Eight Peaks,#ff964c,Kapoldoros,4185,83170
+24,Nishi,Shire,Eight Peaks,#ffb339,Kispoklos,4617,102267
+25,Tismizlalas,Shire,Eight Peaks,#ff9e3f,Tismizlalas,4302,85978
+26,Namawazu,Shire,Eight Peaks,#ffb83c,Hajvany,13518,91171
+27,Gyokuya,Landgrave,Eight Peaks,#ffa23b,Bagyha,11043,65134
+28,Himonoe,Shire,Eight Peaks,#e5b950,Ujhelek,11169,170167
+29,Durasaja,Shire,Eight Peaks,#f5bd43,Durasaja Put,315,8279
+30,Xigling,County,Eight Peaks,#e9a95f,Xigling,35091,91520
+31,Panhezorosza,County,Eight Peaks,#f59859,Panhezorosza,2529,17099
+32,Tagaga,County,Eight Peaks,#ffa23c,Panfuzti,34353,207455
+33,Kiszalomro,Landgrave,Eight Peaks,#eda260,Kiszalomro,8253,57277
+34,Milhia,Shire,Thou,#b8a98d,Patay,7191,175284
+35,Acon,Margrave,Thou,#b398a2,Acon,5616,122703
+36,Arampil,Margrave,Thou,#9ec194,Triseau,4419,91711
+37,Guacac,County,Athel Lorin,#a2fa81,Trigos,18270,404816
+38,Callas,County,Athel Lorin,#a1fe7f,Callas,6228,131081
+39,Patrietena,County,Athel Lorin,#a6ff6c,Patrietena,4788,116962
+40,Jocan,County,Athel Lorin,#baff63,Arrantarru,3186,75183
+41,Tepetahuac,County,Athel Lorin,#d2eb66,Gequenalla,2007,48440
+42,Coratelas,County,Athel Lorin,#abff68,Coratelas,7875,181053
+43,Cocerduenza,Barony,Athel Lorin,#d2ef61,Cocerduenza,2295,55414
+44,Larontorala,Barony,Athel Lorin,#bbff63,Larontorala,1224,38367
+45,Chavatere,Barony,Athel Lorin,#a0ff7e,Chavatere,17019,326230
+46,Napastlan,County,Athel Lorin,#a1ff74,Ollade,3123,70761
+47,Tardasera,County,Athel Lorin,#d2f55c,Tardasera,24669,502081
+48,Mihco,County,Athel Lorin,#d1f85b,Giverdes,17811,353576
+49,Kaidu,County,Blackrock,#ffb449,Kaidu,6192,122154
+50,Shi,County,Blackrock,#e2db3e,Shafeng,6192,110061
+51,Shinan,County,Blackrock,#fdcb34,Shinan,342,19809
+52,Sujiji,County,Blackrock,#e0b452,Wezhou,9027,87311
+53,Hitamami,County,Blackrock,#ced551,Daiaxing,1755,31708
+54,Yoshima,County,Blackrock,#e2b350,Tizhou,846,25270
+55,Oima,Landgrave,Blackrock,#e7b251,Ninganqing,729,19697
+56,Gyomsonti,County,Blackrock,#d1d948,Gyomsonti,3996,87453
+57,Quzhou,County,Blackrock,#fcb34d,Quzhou,7722,118334
+58,Yoshi,County,Blackrock,#dabc5a,Wezhou,5589,89104
+59,Mifu,County,Blackrock,#d3c55c,Ruizhou,2826,23022
+60,Yaragani,County,Blackrock,#d2c75b,Sichuan,2250,24699
+61,Hosagatu,County,Blackrock,#f0b251,Zhending,1521,14722
+62,Ina,Landgrave,Blackrock,#cfcf57,Yazhou,2340,12223
+63,Ototoku,County,Iron Vale,#2bc3dd,Zhegdu,18666,414448
+64,Omio,County,Iron Vale,#27e5c7,Gaozhou,9639,88635
+65,Tokbugh,County,Iron Vale,#42bcd7,Tokbugh,16740,322139
+66,Ninluai,County,Iron Vale,#1fe2d1,Ninluai,9306,283857
+67,Borough,Earldom,Iron Vale,#28c7e0,Borough,6111,142258
+68,Okasu,County,Iron Vale,#29c6e0,Nigjing,10053,197966
+69,Yuezhou,Earldom,Iron Vale,#50c5c4,Yuezhou,5256,77865
+70,Kunomama,County,Iron Vale,#24cde2,Deliatong,2475,60026
+71,Chogtian,County,Iron Vale,#39bcd7,Chogtian,11070,215131
+72,Tayotobe,County,Iron Vale,#50c6c3,Jizhou,21096,390295
+73,Alseagelton,County,Iron Vale,#4dd2ba,Alseagelton,15192,372203
+74,Naoshide,County,Iron Vale,#46dbbb,Kaihuading,4077,81551
+75,Taiping,Earldom,Iron Vale,#2ae5c6,Taiping,5787,185422
+76,Liuzhong,County,Iron Vale,#48d9ba,Liuzhong,4338,89475
+77,Imo,Earldom,Iron Vale,#50c4c5,Zhang,16830,107510
+78,Namari,County,Iron Vale,#44ddbc,Shuntianxi,2376,54478
+79,Yizhou,County,Iron Vale,#50ccbd,Yizhou,10278,210627
+80,Ainaga,Earldom,Iron Vale,#2fbdd7,Laizhoulan,2232,50612
+81,Chazhou,County,Iron Vale,#32bcd6,Chazhou,24714,561589
+82,Fouches,Republic,Red Eyez Tribes,#c7b569,Fouches,61452,1233844
+83,Beira,Province,Red Eyez Tribes,#afa484,Migny,11826,260166
+84,Marcillerin,Province,Red Eyez Tribes,#9ab58e,Marcillerin,56070,1101129
+85,Telmeiras,Province,Red Eyez Tribes,#a5cd72,Gervillevil,22914,483654
+86,Olmachajia,Province,Red Eyez Tribes,#c1a480,Pauveres,22842,293051
+87,Cufeies,Province,Red Eyez Tribes,#b7cb6f,Bonvilleu,10530,231210
+88,Thigry,Province,Red Eyez Tribes,#bcc469,Thigry,46593,919649
+89,Yiz,Prefecture,Gnik,#cfa881,Tritern,7641,182336
+90,Zafenfeld,Canton,Gnik,#e08091,Zafenfeld,5994,137441
+91,Taixin,Province,Gnik,#f7897d,Enabruklos,7245,155111
+92,Kapelden,Canton,Gnik,#d08a9a,Kapelden,44253,876126
+93,Hauweisenen,Prefecture,Gnik,#eba176,Hauweisenen,13248,248840
+94,Steileried,Canton,Gnik,#f79275,Steileried,8937,198493
+95,Puer,Prefecture,Gnik,#cca883,Ficken,19467,433852
+96,Tusen,Canton,Gnik,#cd8e9b,Tusen,531,18898
+97,Zhang,County,Dabonkrus,#bddda6,Langaber,23238,479144
+98,Sureyrar,Earldom,Dabonkrus,#f0c791,Sureyrar,10116,225311
+99,Fjerver,County,Dabonkrus,#c2e796,Fjerver,8577,190359
+100,Rhein,County,Dabonkrus,#ddc1a1,Rhein,27873,540409
+101,Naberg,County,Dabonkrus,#e9c19d,Naberg,13428,254896
+102,Kadrevels,County,Dabonkrus,#e0e78b,Kadrevels,12411,256617
+103,Ocheongam,County,Athalia,#64e591,Villeurs,23067,446165
+104,Miglainges,Margrave,Athalia,#68ed84,Miglainges,16731,336300
+105,Jagwan,County,Athalia,#60e495,Ivry,16398,293700
+106,Ettengengen,Shire,Nordheim,#ff4d29,Ettengengen,22473,417171
+107,Ergis,County,Nordheim,#ff4831,Ergis,36756,728896
+108,Peveshic,County,Nordheim,#ff4832,Peveshic,24435,373100
+109,Ogokjeok,Shire,Nordheim,#ec6e2f,Onisfeld,657,25607
+110,Togsanguk,Earldom,Sinaren,#49afdd,Kafheim,38385,623688
+111,Ecsemod,County,Sinaren,#3dade6,Ecsemod,59463,1109197
+112,Dosavels,Barony,Sinaren,#6b9ad3,Dosavels,45630,721129
+113,Seung,County,Sinaren,#6587ec,Hobenberg,17154,394511
+114,Dotterkir,County,Sinaren,#4c88f0,Dotterkir,54180,1039784
+115,Kasfeld,County,Sinaren,#3aa0f7,Kasfeld,19350,396628
+116,Schalden,County,Sinaren,#4dafdc,Schalden,24804,432977
+117,Gyguk,Earldom,Romana,#f738ff,Flaberfug,10962,233889
+118,Jeong,Shire,Romana,#ff48e9,Nanyang,3717,98341
+119,Glatnaulach,County,Romana,#ff5bf2,Glatnaulach,14472,272132
+120,Schobeldin,County,Romana,#fc5bf2,Schobeldin,4158,91960
+121,Jocheon,Shire,Romana,#ff3af3,Losvisey,324,18955
+122,Salmoenker,County,Romana,#f53bff,Salmoenker,378,20891
+123,Gwacheonguk,County,Romana,#ff34fe,Bobygnan,20106,155613
+124,Dalland,Shire,Romana,#eb49ff,Dalland,3303,74760
+125,Tisegen,County,Romana,#ff32ff,Tisegen,25929,308690
+126,Hustad,Barony,Romana,#ff32ff,Hustad,57312,734620
+127,Logelatey,County,Romana,#ed5afa,Logelatey,9774,151431
+128,Geumseonguk,County,Romana,#f837ff,Snuba,11457,234859
+129,Jinan,Barony,Romana,#ee5af9,Sofolunvi,18198,171073
+130,Yeoguk,Earldom,Seong,#f59b51,Mouxy,423,11694
+131,Asaseonguk,County,Seong,#e1be4f,Huislouy,684,11886
+132,Anyanguk,Earldom,Cheonguk,#74a670,Achartyn,8703,205770
+133,Gogwanguk,Earldom,Cheonguk,#4eb082,Kotig,28494,325259
+134,Weilbahlin,Shire,Cheonguk,#76ad65,Weilbahlin,40392,634957
+135,Pyeong,Margrave,Cheonguk,#49b583,Zasellingen,28206,379765
+136,Buan,Land,Prussia,#6b6db7,,648,3000
+137,Tatsusu,Land,Eight Peaks,#ffa739,Chang,171621,725045
+138,Omar,Territory,Thou,#89bf9e,Thonains,10557,264829
+139,Alhafaisia,Region,Thou,#92c197,,8712,177000
+140,Liuzhoui,Region,Blackrock,#d1d949,Liuzhoui,122409,226470
+141,Ichika,Territory,Blackrock,#f5d538,,693,2000
+142,Yune,Territory,Iron Vale,#50c1cb,Leizhou,1467,4793
+143,Chagning,Territory,Iron Vale,#1ee1d1,Chagning,88713,1136265
+144,Chokoka,Region,Iron Vale,#1ddcd9,,1017,0
+145,Cagointia,Land,Red Eyez Tribes,#c2a480,Marcaligyos,33831,673250
+146,Suline,Territory,Red Eyez Tribes,#c7ae6e,Suline Bon,17379,361564
+147,Durtallin,Region,Gnik,#eb8090,Durtallin,7083,145670
+148,Yizhou,Land,Dabonkrus,#efc397,Yizhou,5778,119065
+149,Namguk,Territory,Athalia,#34ff9c,Grisellemouve,35802,651907
+150,Seugjin,Territory,Athalia,#35fda1,Chamouranvil,11250,155713
+151,Jagju,Territory,Nordheim,#ff4737,,1296,22000
+152,Jang,Land,Nordheim,#ff7023,,2160,40000
+153,Mashiani,Land,Sinaren,#6b9bd3,,8928,155000
+154,Kuchia,Territory,Sinaren,#4493f9,,11475,199000
+155,Yeonguk,Land,Sinaren,#4492f9,,36216,607000
+156,Gundo,Region,Seong,#f09e56,Gundo,10197,63172
+157,Jeocheonguk,Land,Cheonguk,#76b161,Sebach,1323,9639

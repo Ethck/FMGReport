@@ -1,0 +1,24 @@
+Id,Religion,Color,Type,Form,Deity,Area mi2,Population
+15,Blackrockian Deities,url(#hatch5),Organized,Polytheism,Shibetsuri - The Strong Bear,129546,902272
+16,Gwacheonta Religion,url(#hatch5),Organized,Dualism,Angyagwon - The Young Fire,42966,753652
+17,Heuism,url(#hatch4),Organized,Monotheism,Heu Sunc - The Orange Chief,631674,10074288
+18,Gomijizism,url(#hatch3),Organized,Monotheism,Gomijizu - The Superior Spirit,1339965,19490810
+20,Changian Sect,url(#hatch6),Heresy,Heresy,Shibetsuri - The Strong Bear,3924,21516
+21,Dissent of the Evil Worm,url(#hatch6),Heresy,Heresy,Angyagwon - The Young Fire,3375,30000
+22,Apostates of the Waking,url(#hatch6),Heresy,Heresy,Angyagwon - The Young Fire,2511,46000
+1,Astellian Deities,url(#hatch9),Folk,Polytheism,Yungotemios - The Blue Nature,0,0
+2,Norse Spirits,url(#hatch12),Folk,Shamanism,Fegrino - The Sleeping God of Heaven,0,0
+3,Vengrian Deities,url(#hatch11),Folk,Polytheism,Bokorosziks - The Forefather of Summer,0,0
+4,Shwazen Beliefs,url(#hatch10),Folk,Animism,,0,0
+5,Hantzu Forefathers,url(#hatch12),Folk,Ancestor,Xiachun - The Sister of the Eclipse,0,0
+6,Slovan Beliefs,url(#hatch8),Folk,Animism,,0,0
+7,Luari Deities,url(#hatch10),Folk,Polytheism,Ache Sanges - The Brown Maker,0,0
+8,Elladan Beliefs,url(#hatch9),Folk,Animism,,0,0
+9,Angshire Faith,url(#hatch13),Folk,Polytheism,Shoney Wod - The Sustainable Master,0,0
+10,Humans Beliefs,url(#hatch10),Folk,Animism,,8208,161000
+11,Orcs Beliefs,url(#hatch11),Folk,Animism,,3384,67946
+12,Dwarves Gods,url(#hatch8),Folk,Polytheism,Sunakina - The Broken Turtle,4257,57000
+13,Lizardfolk Beliefs,url(#hatch13),Folk,Animism,,170262,3410259
+14,Elves Deities,url(#hatch12),Folk,Polytheism,Cihualco Cam - The Giant Mantis of Frost,108495,2303964
+19,Linhaisian Sect,url(#hatch7),Cult,Cult,Pauzede - The Giver of the Storm,113751,2221560
+0,No religion,,,,,0,0

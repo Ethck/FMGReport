@@ -1,0 +1,17 @@
+Target,Moria,Prussia,Eight Peaks,Thou,Athel Lorin,Blackrock,Iron Vale,Red Eyez Tribes,Gnik,Dabonkrus,Athalia,Nordheim,Sinaren,Romana,Seong,Cheonguk
+Moria,x,Unknown,Neutral,Neutral,Neutral,Unknown,Neutral,Neutral,Ally,Suspicion,Neutral,Unknown,Unknown,Neutral,Unknown,Unknown
+Prussia,Unknown,x,Sympathy,Ally,Neutral,Neutral,Unknown,Unknown,Suspicion,Neutral,Unknown,Neutral,Enemy,Enemy,Unknown,Suzerain
+Eight Peaks,Neutral,Sympathy,x,Sympathy,Neutral,Enemy,Suspicion,Unknown,Neutral,Unknown,Neutral,Ally,Sympathy,Neutral,Unknown,Sympathy
+Thou,Neutral,Ally,Sympathy,x,Neutral,Sympathy,Ally,Suspicion,Unknown,Neutral,Neutral,Neutral,Enemy,Enemy,Neutral,Ally
+Athel Lorin,Neutral,Neutral,Neutral,Neutral,x,Neutral,Unknown,Neutral,Neutral,Neutral,Unknown,Neutral,Unknown,Neutral,Neutral,Neutral
+Blackrock,Unknown,Neutral,Enemy,Sympathy,Neutral,x,Sympathy,Neutral,Neutral,Suspicion,Neutral,Enemy,Suspicion,Unknown,Unknown,Neutral
+Iron Vale,Neutral,Unknown,Suspicion,Ally,Unknown,Sympathy,x,Rival,Unknown,Neutral,Unknown,Unknown,Neutral,Suspicion,Unknown,Unknown
+Red Eyez Tribes,Neutral,Unknown,Unknown,Suspicion,Neutral,Neutral,Rival,x,Unknown,Neutral,Suspicion,Neutral,Neutral,Unknown,Neutral,Unknown
+Gnik,Ally,Suspicion,Neutral,Unknown,Neutral,Neutral,Unknown,Unknown,x,Suspicion,Neutral,Neutral,Ally,Sympathy,Unknown,Suspicion
+Dabonkrus,Suspicion,Neutral,Unknown,Neutral,Neutral,Suspicion,Neutral,Neutral,Suspicion,x,Neutral,Neutral,Neutral,Suspicion,Sympathy,Neutral
+Athalia,Neutral,Unknown,Neutral,Neutral,Unknown,Neutral,Unknown,Suspicion,Neutral,Neutral,x,Neutral,Unknown,Suspicion,Suspicion,Unknown
+Nordheim,Unknown,Neutral,Ally,Neutral,Neutral,Enemy,Unknown,Neutral,Neutral,Neutral,Neutral,x,Sympathy,Neutral,Suspicion,Neutral
+Sinaren,Unknown,Enemy,Sympathy,Enemy,Unknown,Suspicion,Neutral,Neutral,Ally,Neutral,Unknown,Sympathy,x,Ally,Sympathy,Enemy
+Romana,Neutral,Enemy,Neutral,Enemy,Neutral,Unknown,Suspicion,Unknown,Sympathy,Suspicion,Suspicion,Neutral,Ally,x,Unknown,Enemy
+Seong,Unknown,Unknown,Unknown,Neutral,Neutral,Unknown,Unknown,Neutral,Unknown,Sympathy,Suspicion,Suspicion,Sympathy,Unknown,x,Unknown
+Cheonguk,Unknown,Vassal,Sympathy,Ally,Neutral,Neutral,Unknown,Unknown,Suspicion,Neutral,Unknown,Neutral,Enemy,Enemy,Unknown,x

@@ -5,14 +5,16 @@ import pandas as pd
 #CONSTANTS
 pdf = FPDF()
 CENTER = pdf.w - 2*pdf.l_margin
-BAD_LETTERS = ["g", "j", "y"]
+BAD_LETTERS = ["g", "j", "y", "p"]
 
 #Active Variables
 stateStarts = {}
 pageNum = 0
 #FUNCTIONS
-def makeStatePage(state):
-	global pageNum
+def makeStatePage(state, relations):
+	global pageNum, stateStarts
+
+	pdf.set_line_width(3)
 
 	pdf.set_font("Times", size=72)
 	pdf.add_page()
@@ -25,6 +27,11 @@ def makeStatePage(state):
 		pdf.line(0,56,500,56)
 	else:
 		pdf.line(0,51,500,51)
+
+	pdf.set_xy(15, 52)
+	pdf.set_font("Times", size=36)
+	pdf.cell(30, 20, "Key Info")
+
 
 	pdf.set_font("Times", size=18)
 	pdf.set_xy(10,70)
@@ -42,15 +49,43 @@ def makeStatePage(state):
 	stateStarts[state["State"]] = pdf.page_no()
 	pageNum = pdf.page_no()
 
+	makeRelationSection(relations[state["State"]], state["State"])
+
+def makeRelationSection(relations, curr_state):
+	pdf.set_line_width(1)
+	pdf.set_xy(15, 120)
+	pdf.set_font("Times", size=36)
+	pdf.cell(30, 20, "Relations")
+	pdf.set_xy(8, 135)
+	pdf.set_font("Times", size=12)
+
+	global stateNames
+	for i, state in enumerate(stateNames):
+		if i >= 1:
+			pdf.set_x(8)
+
+		if any((badLetter in state) or (badLetter in relations[i]) for badLetter in BAD_LETTERS):
+			pdf.cell(CENTER/4, pdf.font_size + 2, f"{state}", border=1, ln= 0)
+			pdf.cell(CENTER/10, pdf.font_size + 2, f"{relations[i]}", border=1, ln=1)
+		else:
+			pdf.cell(CENTER/4, pdf.font_size, f"{state}", border=1, ln= 0)
+			pdf.cell(CENTER/10, pdf.font_size, f"{relations[i]}", border=1, ln=1)
+
+
 #MAIN
 pdf.set_font("Times", size=12)
 
-states = pd.read_csv("states_data_test.csv")
-states.drop(states.tail(1).index, inplace=True)
-pdf.set_line_width(5)
-states.apply(makeStatePage, axis=1)
+relationsDF = pd.read_csv("data/state_relations_data_test.csv")
+relationsDF = relationsDF.sort_values(by = "Target")
+stateNames = relationsDF['Target'].tolist()
 
-print(f"Finished making {pageNum} pages.")
+states = pd.read_csv("data/states_data_test.csv")
+states.drop(states.tail(1).index, inplace=True)
+states.apply(makeStatePage, axis=1, relations = relationsDF)
+
+#relationsDF.apply(makeRelationSection, axis=1)
+print(stateNames)
 
 
 pdf.output("demo.pdf")
+print(f"Finished making {pageNum} pages.")

@@ -1,0 +1,18 @@
+Id,State,Color,Capital,Culture,Type,Expansionism,Cells,Burgs,Area mi2,Population
+8,Eight Peaks,#fa9733,Usalas,Dwarves,Generic,0.5,482,43,346176,2409430
+18,Sinaren,#3a87e1,Gayagnong,Humans,Generic,0.5,442,18,315585,5678914
+12,Iron Vale,#1ac4c5,Zhegdu,Dwarves,Generic,0.5,419,53,287433,5047145
+13,Red Eyez Tribes,#a0a868,Artotataopo,Lizardfolk,Generic,0.5,398,18,283437,5557517
+7,Prussia,#6e40aa,Djuvog,Humans,Generic,0.5,364,33,251505,3380352
+19,Romana,#fe29f9,Nanyang,Humans,Generic,0.5,272,36,180090,2567214
+11,Blackrock,#e1b92f,Tizhou,Dwarves,Generic,0.5,258,40,174429,1014037
+14,Gnik,#d68076,Dunheimberg,Orcs,Generic,0.5,185,23,114399,2396767
+10,Athel Lorin,#adf05a,Chabe,Elves,Generic,0.5,194,33,108495,2303964
+21,Cheonguk,#45a95b,Cheon,Humans,Generic,0.5,148,10,107118,1555390
+16,Athalia,#34f07f,Gagseong,Humans,Generic,0.5,161,8,103248,1883785
+15,Dabonkrus,#cec988,Yizhou,Orcs,Generic,0.5,159,16,101421,2065801
+17,Nordheim,#ff4111,Peveshic,Humans,Generic,0.5,141,9,87777,1606774
+6,Moria,#f24591,Hofrost,Orcs,Generic,0.5,96,16,53406,1154898
+9,Thou,#8e9b91,Boisnoy,Lizardfolk,Generic,0.5,70,8,36495,831527
+20,Seong,#f59e30,Gundo,Humans,Generic,0.5,23,3,11304,86752
+0,Neutrals,,,,,,0,0,0,0
