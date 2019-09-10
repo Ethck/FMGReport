@@ -1,13 +1,39 @@
 from fpdf import FPDF
 from fpdf.html import hex2dec as h2d
 import pandas as pd
+import re
+import json
 
 nationStarts = {}
 pageNum = 0
 pdf = FPDF()
 
 EPW = pdf.w - 2*pdf.l_margin
-DESCENDERS = ["g", "j", "y", "p"]
+DESCENDERS = ["g", "j", "p", "y"]
+
+def make_cultures_page(map_file):
+    global pageNum
+
+    cultures_list = None
+    for line in map_file:
+        result = re.match('\[\{"name":"Wildlands".*', line)
+        if result != None:
+            cultures_line = result[0]
+            cultures_list = json.loads(cultures_line)
+            break
+
+    pdf.add_page()
+    pageNum += 1
+
+    # Set background image
+    pdf.image("data/scroll_background.jpg", 0, 0)
+
+    pdf.set_font("Times", size=18)
+    pdf.set_xy(14, 75)
+    for culture in cultures_list:
+        if "removed" not in culture:
+            pdf.cell(0, 10, f"Name: {culture['name']}", 0, 2)
+            pdf.cell(0, 10, f"Area: {culture['area']}", 0, 2)
 
 
 def make_nation_page(nation, relations):
@@ -39,13 +65,13 @@ def make_nation_page(nation, relations):
     pdf.line(0, title_y, 500, title_y)
 
     # Make Title
-    pdf.set_xy(15, 52)
+    pdf.set_xy(15, 55)
     pdf.set_font("Times", size=36)
     pdf.cell(30, 20, "Key Info")
 
     # Return to normal
     pdf.set_font("Times", size=18)
-    pdf.set_xy(10, 70)
+    pdf.set_xy(14, 75)
 
     # Print all key info
     frame_key_info_y = pdf.get_y()
@@ -56,7 +82,7 @@ def make_nation_page(nation, relations):
     frame_key_info_y2 = pdf.get_y()
 
     # Store it inside a box
-    pdf.set_xy(8, 70)
+    pdf.set_xy(12, 75)
     pdf.cell(65, frame_key_info_y2 - frame_key_info_y, border=1)
 
     # Record where this page is, update total page count
@@ -146,6 +172,12 @@ nation_names = relations_DF['Target'].tolist()
 
 # Load provinces
 provinces_DF = pd.read_csv("data/provinces_data_test.csv")
+
+# Load the map file
+map_file = open('data/map_file.map', 'r').readlines()
+
+# Make the Cultures Overview page
+make_cultures_page(map_file)
 
 # Load nations, drop the neutrals row, for each nation make a page
 nations = pd.read_csv("data/states_data_test.csv")
