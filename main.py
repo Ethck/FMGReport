@@ -28,12 +28,26 @@ def make_cultures_page(map_file):
     # Set background image
     pdf.image("data/scroll_background.jpg", 0, 0)
 
+    pdf.set_font("Times", size=72)
+    pdf.cell(EPW, 60, "Cultures", align = "C")
+
     pdf.set_font("Times", size=18)
     pdf.set_xy(14, 75)
+
+    counter = 0
+    pdf.set_line_width(2)
     for culture in cultures_list:
-        if "removed" not in culture:
-            pdf.cell(0, 10, f"Name: {culture['name']}", 0, 2)
-            pdf.cell(0, 10, f"Area: {culture['area']}", 0, 2)
+        if ("removed" not in culture) and (culture['area'] > 0):
+            if counter > 0:
+                pdf.set_x(14)
+            if "color" in culture:
+                pdf.set_draw_color(*h2d(culture['color']))
+            else:
+                pdf.set_draw_color(0, 0, 0)
+
+            pdf.cell(EPW/4, 10, f"Name: {culture['name']}", 1, 0)
+            pdf.cell(EPW/4, 10, f"Area: {culture['area']}", 1, 2)
+            counter += 1
 
 
 def make_nation_page(nation, relations):
