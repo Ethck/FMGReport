@@ -67,13 +67,13 @@ def make_nation_page(nation, relations):
     pdf.image("data/scroll_background.jpg", 0, 0)
 
     # Write the nation's name in its color
-    nation_color = h2d(nation["Color"])
-    pdf.cell(EPW, 60, nation["State"], align="C")
+    nation_color = h2d(nation["color"])
+    pdf.cell(EPW, 60, nation["name"], align="C")
     pdf.set_draw_color(*nation_color)
 
     # DESCENDERS adjustment
     title_y = 51
-    if any(descender in nation["State"] for descender in DESCENDERS):
+    if any(descender in nation["name"] for descender in DESCENDERS):
         title_y += 5
 
     pdf.line(0, title_y, 500, title_y)
@@ -87,12 +87,19 @@ def make_nation_page(nation, relations):
     pdf.set_font("Times", size=18)
     pdf.set_xy(14, 75)
 
+    #Retrieve burg information
+    filtered_burgs = filter_burgs(nation['i'])
+    capital = "No Captial Found"
+    population = 0
+    for burg in filtered_burgs:
+        if burg['capital']:
+            capital = burg['name']
+
     # Print all key info
     frame_key_info_y = pdf.get_y()
-    pdf.cell(0, 10, f"Capital: {nation['Capital']}", 0, 2)
-    pdf.cell(0, 10, f"Burgs: {nation['Burgs']}", 0, 2)
-    pdf.cell(0, 10, f"Area (mi^2): {nation['Area mi2']}", 0, 2)
-    pdf.cell(0, 10, f"Population: {nation['Population']}", 0, 1)
+    pdf.cell(0, 10, f"Capital: {capital}", 0, 2)
+    pdf.cell(0, 10, f"Burgs: {nation['burgs']}", 0, 2)
+    pdf.cell(0, 10, f"Area (mi^2): {nation['area']}", 0, 1)
     frame_key_info_y2 = pdf.get_y()
 
     # Store it inside a box
@@ -100,16 +107,16 @@ def make_nation_page(nation, relations):
     pdf.cell(65, frame_key_info_y2 - frame_key_info_y, border=1)
 
     # Record where this page is, update total page count
-    nationStarts[nation["State"]] = pdf.page_no()
+    nationStarts[nation["name"]] = pdf.page_no()
     pageNum = pdf.page_no()
 
     # Add additional sections
     pdf.set_line_width(1)
-    make_relation_section(relations[nation["State"]], nation["State"])
-    make_provinces_section(nation["State"])
+    make_relation_section(relations[nation["name"]], nation["name"])
+    make_provinces_section(nation["i"])
 
 
-def make_relation_section(relations, curr_nation):
+def make_relation_section(relations, curr_nation_id):
     """Add a relations section to the nation's page that details
     relations with all other nations.
     """
@@ -141,13 +148,13 @@ def make_relation_section(relations, curr_nation):
         pdf.cell(EPW/10, height, f"{relations[i]}", border=1, ln=1)
 
 
-def make_provinces_section(curr_nation):
+def make_provinces_section(curr_nation_id):
     """Add a provinces section to the nation's page to show all
     active provinces within the nation.
     """
 
-    # Select only the provinces that are inside of curr_nation
-    selection = provinces_DF.loc[provinces_DF["State"] == curr_nation]
+    # Select only the provinces that are inside of curr_nation_id
+    curr_provinces = [province for province in provinces if province['state'] == curr_nation_id]
 
     # Make Header
     pdf.set_xy(120, 55)
@@ -158,22 +165,39 @@ def make_provinces_section(curr_nation):
     pdf.set_xy(100, 70)
     pdf.set_font("Times", size=12)
 
-    for i in range(len(selection.index)):
+    for province in curr_provinces:
         # Grab row, convert to array, set borders to province color
         th = pdf.font_size + 1
         pdf.set_x(85)
-        row = selection.iloc[[i]].to_numpy()[0]
-        pdf.set_draw_color(*h2d(row[4]))
+        pdf.set_draw_color(*h2d(province['color']))
 
         # Compensate for DESCENDERS
-        if any((descender in row[2]) for descender in DESCENDERS):
+        if any((descender in province['formName']) or (descender in province['name']) for descender in DESCENDERS):
             th += 1
 
-        # {form} of {name} | {area} | {population}
-        # EX: Barony of Elvelavo | 5.4k | 113k
-        pdf.cell(EPW/4, th, f"{row[2]} of {row[1]}", 1, 0)
-        pdf.cell(EPW/7, th, f"Area: {row[6]}", 1, 0)
-        pdf.cell(EPW/4, th, f"Pop.: {row[7]}", 1, 2)
+        # {form} of {name}
+        # EX: Barony of Elvelavo
+        pdf.cell(EPW/4, th, f"{province['formName']} of {province['name']}", 1, 2)
+
+
+def filter_map(pattern):
+    result = None
+    for line in map_file:
+        matched = re.match(pattern, line)
+        if matched != None:
+            result = json.loads(matched[0])
+
+    return result
+
+def filter_burgs(id):
+    result = []
+
+    for burg in burgs:
+        if 'state' in burg:
+            if burg["state"] == id:
+                result.append(burg)
+
+    return result
 
 
 # MAIN
@@ -193,10 +217,14 @@ map_file = open('data/map_file.map', 'r').readlines()
 # Make the Cultures Overview page
 make_cultures_page(map_file)
 
-# Load nations, drop the neutrals row, for each nation make a page
-nations = pd.read_csv("data/states_data_test.csv")
-nations.drop(nations.tail(1).index, inplace=True)
-nations.apply(make_nation_page, axis=1, relations=relations_DF)
+nations = filter_map('\[\{"i":0,"name":"Neutrals".*')
+burgs = filter_map('\[\{\},\{"cell":.*')
+provinces = filter_map('\[0,\{"i":1,"state":.*')
+provinces.remove(0)
+
+for nation in nations:
+    if (nation['area'] != 0) and ('removed' not in nation):
+        make_nation_page(nation, relations = relations_DF)
 
 # Write to PDF, and say we are finished.
 pdf.output("demo.pdf")
