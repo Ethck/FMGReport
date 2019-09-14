@@ -1,20 +1,23 @@
 from fpdf import FPDF
-from fpdf.html import hex2dec as h2d
+#from fpdf.html import hex2dec as h2d
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import inch as INCH
 import pandas as pd
 import re
 import json
 from pathlib import Path
 
-class PDF(FPDF):
-    def header(self):
-        # Set background image
-        pdf.image("scroll_background.jpg", 0, 0)
-
 index = {}
 pageNum = 0
-pdf = PDF()
+c = canvas.Canvas("demo2.pdf")
+c_width, c_height = A4
 
-EPW = pdf.w - 2*pdf.l_margin
+textobject = c.beginText()
+textobject.setTextOrigin(INCH, 2.5*INCH)
+textobject.setFont("Times-Roman", 12)
+
+EPW = c_width - 2*INCH
 DESCENDERS = ["g", "j", "p", "y"]
 
 
@@ -95,7 +98,7 @@ def make_religions_page():
                 pdf.set_y(pdf.get_y() + 1)
 
 
-def make_nation_page(nation):
+def make_nation_page(nation, c):
     """Create the basic page for every nation.
 
     This page contains key info as well as the nation's name and color.
@@ -103,35 +106,41 @@ def make_nation_page(nation):
     """
     global pageNum, index
 
-    pdf.set_line_width(3)
+    c.setFont("Times-Roman", 72)
+    c.line(INCH, INCH, INCH, c_height - INCH)
+    c.line(c_width - INCH, INCH, c_width - INCH, c_height - INCH)
 
-    pdf.set_font("Times", size=72)
-    pdf.add_page()
+    c.line(c_width - INCH, INCH, INCH, INCH)
+    c.line(c_width - INCH, c_height - INCH, INCH, c_height - INCH)
 
     # Record where this page is, update total page count
-    index[pdf.page_no()] = nation["name"]
+    index[pageNum] = nation["name"]
     pageNum += 1
 
     # Write the nation's name in its color
-    nation_color = h2d(nation["color"])
-    pdf.cell(EPW, 60, nation["name"], align="C")
-    pdf.set_draw_color(*nation_color)
+    nation_color = nation["color"]
+    c.drawCentredString(EPW/2 + 70, c_height - INCH - 50, nation["name"])
 
     # DESCENDERS adjustment
     title_y = 51
     if any(descender in nation["name"] for descender in DESCENDERS):
-        title_y += 5
+        title_y += 15
 
-    pdf.line(0, title_y, 500, title_y)
+    c.setLineWidth(5)
+    c.setStrokeColor(nation_color)
+    c.line(0, c_height - INCH - title_y, c_width, c_height - INCH - title_y)
+    c.setLineWidth(1)
+
+    t = c.beginText()
 
     # Make Title
-    pdf.set_xy(15, 55)
-    pdf.set_font("Times", size=36)
-    pdf.cell(30, 20, "Key Info")
+    t.setTextOrigin(INCH + 10, c_height - INCH - title_y * 2)
+    t.setFont("Times-Roman", 36)
+    t.textLine("Key Info")
 
     # Return to normal
-    pdf.set_font("Times", size=18)
-    pdf.set_xy(14, 75)
+    t.setFont("Times-Roman", 18)
+    t.moveCursor(0, -10)
 
     #Retrieve burg information
     filtered_burgs = filter_burgs(nation['i'])
@@ -142,20 +151,20 @@ def make_nation_page(nation):
             capital = burg['name']
 
     # Print all key info
-    frame_key_info_y = pdf.get_y()
-    pdf.cell(0, 10, f"Capital: {capital}", 0, 2)
-    pdf.cell(0, 10, f"Burgs: {nation['burgs']}", 0, 2)
-    pdf.cell(0, 10, f"Area (mi^2): {nation['area']}", 0, 1)
-    frame_key_info_y2 = pdf.get_y()
+    t_y = t.getY() - 30
+    t.textLine(f"Capital: {capital}")
+    t.textLine(f"Burgs: {nation['burgs']}")
+    t.textLine(f"Area (mi^2): {nation['area']}")
 
     # Store it inside a box
-    pdf.set_xy(12, 75)
-    pdf.cell(65, frame_key_info_y2 - frame_key_info_y, border=1)
+    c.setLineWidth(5)
+    c.rect(INCH + 7, t_y, 170, 70)
+    c.setLineWidth(1)
+    c.drawText(t)
 
     # Add additional sections
-    pdf.set_line_width(1)
-    make_provinces_section(nation["i"])
-    make_relation_section(nation["diplomacy"])
+    #make_provinces_section(nation["i"])
+    #make_relation_section(nation["diplomacy"])
 
 
 def make_relation_section(relations):
@@ -263,19 +272,12 @@ def filter_burgs(id):
     return result
 
 
-# MAIN
-pdf.set_font("Times", size=12)
-
-# Load the map file
-#map_file = open('map_file.map', 'r').readlines()
 map_files = [pth for pth in Path.cwd().iterdir() if pth.suffix == ".map"]
 for file in map_files:
     map_file = open(file, 'r').readlines()
-    pdf.add_page()
-    pageNum += 1
 
     # Make the Cultures Overview page
-    make_cultures_page(map_file)
+    #make_cultures_page(map_file)
 
     nations = filter_map('\[\{"i":0,"name":"Neutrals".*')
     burgs = filter_map('\[\{\},\{"cell":.*')
@@ -283,22 +285,25 @@ for file in map_files:
     religions = filter_map('\[\{"i":0,"name":"No religion"\}.*')
     provinces.remove(0)
 
-    make_religions_page()
+    #make_religions_page()
     nation_names = [nation["name"] for nation in nations]
     nation_ids = []
     deleted_nations = []
 
     for nation in nations:
         if (nation['area'] != 0) and ('removed' not in nation):
-            make_nation_page(nation)
+            c.showPage()
+            make_nation_page(nation, c)
             nation_ids.append(nation["i"])
         else:
             deleted_nations.append(nation["i"])
 
-    print(index)
-    make_toc()
+    #print(index)
+    #make_toc()
 
-    # Write to PDF, and say we are finished.
-    pdf.output("demo.pdf")
     print(
-        f"Finished making {pageNum} pages about all {len(nation_ids)} nations.")
+        f"Finished making x pages about all {len(nation_ids)} nations.")
+    c.save()
+
+#NOTES
+#canvas.bookmarkPage(name)
