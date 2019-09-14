@@ -7,7 +7,7 @@ import json
 class PDF(FPDF):
     def header(self):
         # Set background image
-        pdf.image("data/scroll_background.jpg", 0, 0)
+        pdf.image("scroll_background.jpg", 0, 0)
 
 nationStarts = {}
 pageNum = 0
@@ -52,6 +52,7 @@ def make_cultures_page(map_file):
             pdf.cell(EPW/4, 10, f"Area: {culture['area']}", 1, 2)
             counter += 1
 
+
 def make_religions_page():
     global pageNum
     pdf.add_page()
@@ -95,9 +96,6 @@ def make_nation_page(nation):
 
     pdf.set_font("Times", size=72)
     pdf.add_page()
-
-    # Set background image
-    pdf.image("data/scroll_background.jpg", 0, 0)
 
     # Write the nation's name in its color
     nation_color = h2d(nation["color"])
@@ -246,7 +244,7 @@ def filter_burgs(id):
 pdf.set_font("Times", size=12)
 
 # Load the map file
-map_file = open('data/map_file.map', 'r').readlines()
+map_file = open('map_file.map', 'r').readlines()
 
 # Make the Cultures Overview page
 make_cultures_page(map_file)
