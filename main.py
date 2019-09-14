@@ -50,7 +50,7 @@ def make_cultures_page(map_file):
             counter += 1
 
 
-def make_nation_page(nation, relations):
+def make_nation_page(nation):
     """Create the basic page for every nation.
 
     This page contains key info as well as the nation's name and color.
@@ -112,11 +112,11 @@ def make_nation_page(nation, relations):
 
     # Add additional sections
     pdf.set_line_width(1)
-    make_relation_section(relations[nation["name"]], nation["name"])
     make_provinces_section(nation["i"])
+    make_relation_section(nation["diplomacy"])
 
 
-def make_relation_section(relations, curr_nation_id):
+def make_relation_section(relations):
     """Add a relations section to the nation's page that details
     relations with all other nations.
     """
@@ -131,21 +131,26 @@ def make_relation_section(relations, curr_nation_id):
     pdf.set_font("Times", size=12)
     pdf.set_draw_color(0, 0, 0)
 
-    global nation_names
-    for i, nation in enumerate(nation_names):
-        if i >= 1:
+    first_nation_lock = False
+
+    for i, curr_nation_name in enumerate(nation_names):
+        if first_nation_lock:
             pdf.set_x(8)
+        else:
+            first_nation_lock = True
 
         height = pdf.font_size + 1
 
-        # If letter is a descender, increase space allowed.
-        if any((descender in nation) or (descender in relations[i]) for
-                descender in DESCENDERS):
-            height += 1
+        # Skip all nations that aren't actually on the map. Area = 0 or is removed.
+        if i not in deleted_nations:
+            # If letter is a descender, increase space allowed.
+            if any((descender in curr_nation_name) or (descender in relations[i]) for
+                    descender in DESCENDERS):
+                height += 1
 
-        # Target nation and their relation with curr_nation.
-        pdf.cell(EPW/4, height, f"{nation}", border=1, ln=0)
-        pdf.cell(EPW/10, height, f"{relations[i]}", border=1, ln=1)
+            # Target nation and their relation with curr_nation.
+            pdf.cell(EPW/4, height, f"{curr_nation_name}", border=1, ln=0)
+            pdf.cell(EPW/10, height, f"{relations[i]}", border=1, ln=1)
 
 
 def make_provinces_section(curr_nation_id):
@@ -177,7 +182,10 @@ def make_provinces_section(curr_nation_id):
 
         # {form} of {name}
         # EX: Barony of Elvelavo
-        pdf.cell(EPW/4, th, f"{province['formName']} of {province['name']}", 1, 2)
+        if province['fullName'] != province['name']:
+            pdf.cell(EPW/4, th, f"{province['fullName']}", 1, 2)
+        else:
+            pdf.cell(EPW/4, th, f"{province['formName']} of {province['name']}", 1, 2)
 
 
 def filter_map(pattern):
@@ -188,6 +196,7 @@ def filter_map(pattern):
             result = json.loads(matched[0])
 
     return result
+
 
 def filter_burgs(id):
     result = []
@@ -203,14 +212,6 @@ def filter_burgs(id):
 # MAIN
 pdf.set_font("Times", size=12)
 
-# Load relations, sort to alphabetical by origin nation
-relations_DF = pd.read_csv("data/state_relations_data_test.csv")
-relations_DF = relations_DF.sort_values(by="Target")
-nation_names = relations_DF['Target'].tolist()
-
-# Load provinces
-provinces_DF = pd.read_csv("data/provinces_data_test.csv")
-
 # Load the map file
 map_file = open('data/map_file.map', 'r').readlines()
 
@@ -222,11 +223,18 @@ burgs = filter_map('\[\{\},\{"cell":.*')
 provinces = filter_map('\[0,\{"i":1,"state":.*')
 provinces.remove(0)
 
+nation_names = [nation["name"] for nation in nations]
+nation_ids = []
+deleted_nations = []
+
 for nation in nations:
     if (nation['area'] != 0) and ('removed' not in nation):
-        make_nation_page(nation, relations = relations_DF)
+        make_nation_page(nation)
+        nation_ids.append(nation["i"])
+    else:
+        deleted_nations.append(nation["i"])
 
 # Write to PDF, and say we are finished.
 pdf.output("demo.pdf")
 print(
-    f"Finished making {pageNum} pages about all {len(nation_names)} nations.")
+    f"Finished making {pageNum} pages about all {len(nation_ids)} nations.")
