@@ -4,12 +4,18 @@ import pandas as pd
 import re
 import json
 
+class PDF(FPDF):
+    def header(self):
+        # Set background image
+        pdf.image("data/scroll_background.jpg", 0, 0)
+
 nationStarts = {}
 pageNum = 0
-pdf = FPDF()
+pdf = PDF()
 
 EPW = pdf.w - 2*pdf.l_margin
 DESCENDERS = ["g", "j", "p", "y"]
+
 
 def make_cultures_page(map_file):
     global pageNum
@@ -24,9 +30,6 @@ def make_cultures_page(map_file):
 
     pdf.add_page()
     pageNum += 1
-
-    # Set background image
-    pdf.image("data/scroll_background.jpg", 0, 0)
 
     pdf.set_font("Times", size=72)
     pdf.cell(EPW, 60, "Cultures", align = "C")
@@ -47,6 +50,36 @@ def make_cultures_page(map_file):
 
             pdf.cell(EPW/4, 10, f"Name: {culture['name']}", 1, 0)
             pdf.cell(EPW/4, 10, f"Area: {culture['area']}", 1, 2)
+            counter += 1
+
+def make_religions_page():
+    global pageNum
+    pdf.add_page()
+    pageNum += 1
+
+    pdf.set_font("Times", size=72)
+    pdf.cell(EPW, 60, "Religions", align = "C")
+
+    pdf.set_font("Times", size=18)
+    pdf.set_xy(14, 55)
+
+    counter = 0
+    pdf.set_line_width(1)
+    for religion in religions:
+        if ("origin" in religion) and (religion["origin"] != 0):
+            if counter > 0:
+                pdf.set_x(14)
+            if "color" in religion:
+                pdf.set_draw_color(*h2d(religion['color']))
+            else:
+                pdf.set_draw_color(0, 0, 0)
+
+            if religion["name"] != "No religion":
+                pdf.cell(EPW/3, 10, f"{religion['name']}", 1, 0)
+                pdf.cell(EPW/4, 10, f"{religion['form']}", 1, 0)
+                pdf.cell(EPW/4, 10, f"Type: {religion['type']}", 1, 1)
+                pdf.set_x(14)
+                pdf.cell(EPW/3 + EPW/4, 10, f"{religion['deity']}", 1, 2)
             counter += 1
 
 
@@ -221,8 +254,10 @@ make_cultures_page(map_file)
 nations = filter_map('\[\{"i":0,"name":"Neutrals".*')
 burgs = filter_map('\[\{\},\{"cell":.*')
 provinces = filter_map('\[0,\{"i":1,"state":.*')
+religions = filter_map('\[\{"i":0,"name":"No religion"\}.*')
 provinces.remove(0)
 
+make_religions_page()
 nation_names = [nation["name"] for nation in nations]
 nation_ids = []
 deleted_nations = []
