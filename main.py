@@ -3,13 +3,14 @@ from fpdf.html import hex2dec as h2d
 import pandas as pd
 import re
 import json
+from pathlib import Path
 
 class PDF(FPDF):
     def header(self):
         # Set background image
         pdf.image("scroll_background.jpg", 0, 0)
 
-nationStarts = {}
+index = {}
 pageNum = 0
 pdf = PDF()
 
@@ -30,6 +31,8 @@ def make_cultures_page(map_file):
 
     pdf.add_page()
     pageNum += 1
+    index[pdf.page_no()] = "Cultures"
+
 
     pdf.set_font("Times", size=72)
     pdf.cell(EPW, 60, "Cultures", align = "C")
@@ -37,12 +40,14 @@ def make_cultures_page(map_file):
     pdf.set_font("Times", size=18)
     pdf.set_xy(14, 75)
 
-    counter = 0
+    first_lock = False
     pdf.set_line_width(2)
     for culture in cultures_list:
         if ("removed" not in culture) and (culture['area'] > 0):
-            if counter > 0:
+            if first_lock:
                 pdf.set_x(14)
+            else:
+                first_lock = True
             if "color" in culture:
                 pdf.set_draw_color(*h2d(culture['color']))
             else:
@@ -50,38 +55,44 @@ def make_cultures_page(map_file):
 
             pdf.cell(EPW/4, 10, f"Name: {culture['name']}", 1, 0)
             pdf.cell(EPW/4, 10, f"Area: {culture['area']}", 1, 2)
-            counter += 1
+            pdf.set_y(pdf.get_y() + 2)
 
 
 def make_religions_page():
     global pageNum
     pdf.add_page()
     pageNum += 1
+    index[pdf.page_no()] = "Relgions"
 
     pdf.set_font("Times", size=72)
     pdf.cell(EPW, 60, "Religions", align = "C")
 
     pdf.set_font("Times", size=18)
-    pdf.set_xy(14, 55)
+    pdf.set_xy(8, 55)
 
-    counter = 0
     pdf.set_line_width(1)
+    RELIGIONS_RIGHT_PADDING = 9.8
+    first_lock = False
     for religion in religions:
         if ("origin" in religion) and (religion["origin"] != 0):
-            if counter > 0:
-                pdf.set_x(14)
+            if first_lock:
+                pdf.set_x(8)
+            else:
+                first_lock = True
             if "color" in religion:
                 pdf.set_draw_color(*h2d(religion['color']))
             else:
                 pdf.set_draw_color(0, 0, 0)
 
             if religion["name"] != "No religion":
-                pdf.cell(EPW/3, 10, f"{religion['name']}", 1, 0)
-                pdf.cell(EPW/4, 10, f"{religion['form']}", 1, 0)
-                pdf.cell(EPW/4, 10, f"Type: {religion['type']}", 1, 1)
+                # Name, Form
+                #  Deity, type
+                pdf.cell(EPW/3 + EPW/3, 10, f"{religion['name']}", 1, 0)
+                pdf.cell(EPW/3, 10, f"Form: {religion['form']}", 1, 1)
                 pdf.set_x(14)
-                pdf.cell(EPW/3 + EPW/4, 10, f"{religion['deity']}", 1, 2)
-            counter += 1
+                pdf.cell(EPW/3 + EPW/3, 10, f"Deity: {religion['deity']}", 1, 0)
+                pdf.cell(EPW/4 + RELIGIONS_RIGHT_PADDING, 10, f"{religion['type']}", 1, 2)
+                pdf.set_y(pdf.get_y() + 1)
 
 
 def make_nation_page(nation):
@@ -90,12 +101,16 @@ def make_nation_page(nation):
     This page contains key info as well as the nation's name and color.
     Then, additional sections are added end of the function.
     """
-    global pageNum, nationStarts
+    global pageNum, index
 
     pdf.set_line_width(3)
 
     pdf.set_font("Times", size=72)
     pdf.add_page()
+
+    # Record where this page is, update total page count
+    index[pdf.page_no()] = nation["name"]
+    pageNum += 1
 
     # Write the nation's name in its color
     nation_color = h2d(nation["color"])
@@ -136,10 +151,6 @@ def make_nation_page(nation):
     # Store it inside a box
     pdf.set_xy(12, 75)
     pdf.cell(65, frame_key_info_y2 - frame_key_info_y, border=1)
-
-    # Record where this page is, update total page count
-    nationStarts[nation["name"]] = pdf.page_no()
-    pageNum = pdf.page_no()
 
     # Add additional sections
     pdf.set_line_width(1)
@@ -218,6 +229,18 @@ def make_provinces_section(curr_nation_id):
         else:
             pdf.cell(EPW/4, th, f"{province['formName']} of {province['name']}", 1, 2)
 
+        pdf.set_y(pdf.get_y() + 1)
+
+
+def make_toc():
+    pdf.page = 1
+    pdf.set_font("Times", size=72)
+    pdf.cell(EPW, 60, "Table of Contents", align = "C")
+    pdf.set_font("Times", size=18)
+    for page in index:
+        pdf.cell(EPW/4, 10, f"A", border=1, ln=0)
+        pdf.cell(EPW/10, 10, f"B", border=1, ln=1)
+
 
 def filter_map(pattern):
     result = None
@@ -244,30 +267,38 @@ def filter_burgs(id):
 pdf.set_font("Times", size=12)
 
 # Load the map file
-map_file = open('map_file.map', 'r').readlines()
+#map_file = open('map_file.map', 'r').readlines()
+map_files = [pth for pth in Path.cwd().iterdir() if pth.suffix == ".map"]
+for file in map_files:
+    map_file = open(file, 'r').readlines()
+    pdf.add_page()
+    pageNum += 1
 
-# Make the Cultures Overview page
-make_cultures_page(map_file)
+    # Make the Cultures Overview page
+    make_cultures_page(map_file)
 
-nations = filter_map('\[\{"i":0,"name":"Neutrals".*')
-burgs = filter_map('\[\{\},\{"cell":.*')
-provinces = filter_map('\[0,\{"i":1,"state":.*')
-religions = filter_map('\[\{"i":0,"name":"No religion"\}.*')
-provinces.remove(0)
+    nations = filter_map('\[\{"i":0,"name":"Neutrals".*')
+    burgs = filter_map('\[\{\},\{"cell":.*')
+    provinces = filter_map('\[0,\{"i":1,"state":.*')
+    religions = filter_map('\[\{"i":0,"name":"No religion"\}.*')
+    provinces.remove(0)
 
-make_religions_page()
-nation_names = [nation["name"] for nation in nations]
-nation_ids = []
-deleted_nations = []
+    make_religions_page()
+    nation_names = [nation["name"] for nation in nations]
+    nation_ids = []
+    deleted_nations = []
 
-for nation in nations:
-    if (nation['area'] != 0) and ('removed' not in nation):
-        make_nation_page(nation)
-        nation_ids.append(nation["i"])
-    else:
-        deleted_nations.append(nation["i"])
+    for nation in nations:
+        if (nation['area'] != 0) and ('removed' not in nation):
+            make_nation_page(nation)
+            nation_ids.append(nation["i"])
+        else:
+            deleted_nations.append(nation["i"])
 
-# Write to PDF, and say we are finished.
-pdf.output("demo.pdf")
-print(
-    f"Finished making {pageNum} pages about all {len(nation_ids)} nations.")
+    print(index)
+    make_toc()
+
+    # Write to PDF, and say we are finished.
+    pdf.output("demo.pdf")
+    print(
+        f"Finished making {pageNum} pages about all {len(nation_ids)} nations.")
