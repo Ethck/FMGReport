@@ -1,24 +1,18 @@
-from fpdf import FPDF
-#from fpdf.html import hex2dec as h2d
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.units import inch as INCH
-import pandas as pd
+from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, Spacer, PageBreak
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 import re
 import json
 from pathlib import Path
 
 index = {}
 pageNum = 0
-c = canvas.Canvas("demo2.pdf")
-c_width, c_height = A4
-
-textobject = c.beginText()
-textobject.setTextOrigin(INCH, 2.5*INCH)
-textobject.setFont("Times-Roman", 12)
-
-EPW = c_width - 2*INCH
 DESCENDERS = ["g", "j", "p", "y"]
+doc = SimpleDocTemplate("demo3.pdf",
+                        rightMargin=72,leftMargin=72,
+                        topMargin=72,bottomMargin=18)
+
+Story = []
+stylesheet = getSampleStyleSheet()
 
 
 def make_cultures_page(map_file):
@@ -98,7 +92,7 @@ def make_religions_page():
                 pdf.set_y(pdf.get_y() + 1)
 
 
-def make_nation_page(nation, c):
+def make_nation_page(nation):
     """Create the basic page for every nation.
 
     This page contains key info as well as the nation's name and color.
@@ -106,41 +100,18 @@ def make_nation_page(nation, c):
     """
     global pageNum, index
 
-    c.setFont("Times-Roman", 72)
-    c.line(INCH, INCH, INCH, c_height - INCH)
-    c.line(c_width - INCH, INCH, c_width - INCH, c_height - INCH)
-
-    c.line(c_width - INCH, INCH, INCH, INCH)
-    c.line(c_width - INCH, c_height - INCH, INCH, c_height - INCH)
-
     # Record where this page is, update total page count
     index[pageNum] = nation["name"]
     pageNum += 1
 
     # Write the nation's name in its color
     nation_color = nation["color"]
-    c.drawCentredString(EPW/2 + 70, c_height - INCH - 50, nation["name"])
-
-    # DESCENDERS adjustment
-    title_y = 51
-    if any(descender in nation["name"] for descender in DESCENDERS):
-        title_y += 15
-
-    c.setLineWidth(5)
-    c.setStrokeColor(nation_color)
-    c.line(0, c_height - INCH - title_y, c_width, c_height - INCH - title_y)
-    c.setLineWidth(1)
-
-    t = c.beginText()
+    p = Paragraph(nation['name'], style = stylesheet["Title"])
+    Story.append(p)
 
     # Make Title
-    t.setTextOrigin(INCH + 10, c_height - INCH - title_y * 2)
-    t.setFont("Times-Roman", 36)
-    t.textLine("Key Info")
-
-    # Return to normal
-    t.setFont("Times-Roman", 18)
-    t.moveCursor(0, -10)
+    p2 = Paragraph("Key Info", style = stylesheet["Heading1"])
+    Story.append(p2)
 
     #Retrieve burg information
     filtered_burgs = filter_burgs(nation['i'])
@@ -151,57 +122,34 @@ def make_nation_page(nation, c):
             capital = burg['name']
 
     # Print all key info
-    t_y = t.getY() - 30
-    t.textLine(f"Capital: {capital}")
-    t.textLine(f"Burgs: {nation['burgs']}")
-    t.textLine(f"Area (mi^2): {nation['area']}")
-
-    # Store it inside a box
-    c.setLineWidth(5)
-    c.rect(INCH + 7, t_y, 170, 70)
-    c.setLineWidth(1)
-    c.drawText(t)
+    p3 = Paragraph(
+        f"""
+            • Capital: {capital}<br/>
+            • Burgs: {nation['burgs']}<br/>
+            • Area (mi^2): {nation['area']}
+        """, style= stylesheet["Normal"])
+    Story.append(p3)
 
     # Add additional sections
-    #make_provinces_section(nation["i"])
-    #make_relation_section(nation["diplomacy"])
+    Story.append(make_provinces_section(nation["i"]))
+    Story.append(make_relation_section(nation["diplomacy"]))
+    Story.append(PageBreak())
 
 
 def make_relation_section(relations):
     """Add a relations section to the nation's page that details
     relations with all other nations.
     """
-
-    # Create the section header
-    pdf.set_xy(15, 120)
-    pdf.set_font("Times", size=36)
-    pdf.cell(30, 20, "Relations")
-
-    # Return to normal
-    pdf.set_xy(8, 135)
-    pdf.set_font("Times", size=12)
-    pdf.set_draw_color(0, 0, 0)
-
-    first_nation_lock = False
+    data = []
 
     for i, curr_nation_name in enumerate(nation_names):
-        if first_nation_lock:
-            pdf.set_x(8)
-        else:
-            first_nation_lock = True
-
-        height = pdf.font_size + 1
-
         # Skip all nations that aren't actually on the map. Area = 0 or is removed.
         if i not in deleted_nations:
-            # If letter is a descender, increase space allowed.
-            if any((descender in curr_nation_name) or (descender in relations[i]) for
-                    descender in DESCENDERS):
-                height += 1
-
             # Target nation and their relation with curr_nation.
-            pdf.cell(EPW/4, height, f"{curr_nation_name}", border=1, ln=0)
-            pdf.cell(EPW/10, height, f"{relations[i]}", border=1, ln=1)
+            data.append((curr_nation_name, relations[i]))
+
+    relations_table = Table(data)
+    return relations_table
 
 
 def make_provinces_section(curr_nation_id):
@@ -211,34 +159,18 @@ def make_provinces_section(curr_nation_id):
 
     # Select only the provinces that are inside of curr_nation_id
     curr_provinces = [province for province in provinces if province['state'] == curr_nation_id]
-
-    # Make Header
-    pdf.set_xy(120, 55)
-    pdf.set_font("Times", size=36)
-    pdf.cell(30, 20, "Provinces")
-
-    # Return to normal
-    pdf.set_xy(100, 70)
-    pdf.set_font("Times", size=12)
-
+    data = []
     for province in curr_provinces:
-        # Grab row, convert to array, set borders to province color
-        th = pdf.font_size + 1
-        pdf.set_x(85)
-        pdf.set_draw_color(*h2d(province['color']))
-
-        # Compensate for DESCENDERS
-        if any((descender in province['formName']) or (descender in province['name']) for descender in DESCENDERS):
-            th += 1
-
-        # {form} of {name}
+        # {form} of {name} OR {fullName}
         # EX: Barony of Elvelavo
         if province['fullName'] != province['name']:
-            pdf.cell(EPW/4, th, f"{province['fullName']}", 1, 2)
+            data.append(province['fullName'])
         else:
-            pdf.cell(EPW/4, th, f"{province['formName']} of {province['name']}", 1, 2)
+            data.append(f"{province['formName']} of {province['name']}")
 
-        pdf.set_y(pdf.get_y() + 1)
+    province_paragraph = Paragraph('<br/>'.join(data), style = stylesheet["Normal"])
+    return province_paragraph
+
 
 
 def make_toc():
@@ -292,18 +224,11 @@ for file in map_files:
 
     for nation in nations:
         if (nation['area'] != 0) and ('removed' not in nation):
-            c.showPage()
-            make_nation_page(nation, c)
+            make_nation_page(nation)
             nation_ids.append(nation["i"])
         else:
             deleted_nations.append(nation["i"])
 
-    #print(index)
-    #make_toc()
-
     print(
         f"Finished making x pages about all {len(nation_ids)} nations.")
-    c.save()
-
-#NOTES
-#canvas.bookmarkPage(name)
+    doc.build(Story)
