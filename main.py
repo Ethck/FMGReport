@@ -1,5 +1,6 @@
-from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, Spacer, PageBreak
+from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, Spacer, PageBreak, Frame, Image
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.pdfgen.canvas import Canvas
 import re
 import json
 from pathlib import Path
@@ -13,7 +14,6 @@ doc = SimpleDocTemplate("demo3.pdf",
 
 Story = []
 stylesheet = getSampleStyleSheet()
-
 
 def make_cultures_page(map_file):
     global pageNum
@@ -93,6 +93,7 @@ def make_religions_page():
 
 
 def make_nation_page(nation):
+    bkg_image = Image("scroll_background.jpg")
     """Create the basic page for every nation.
 
     This page contains key info as well as the nation's name and color.
@@ -131,7 +132,11 @@ def make_nation_page(nation):
     Story.append(p3)
 
     # Add additional sections
+    prov = Paragraph("Provinces", style = stylesheet["Heading1"])
+    Story.append(prov)
     Story.append(make_provinces_section(nation["i"]))
+    dip = Paragraph("Diplomacy", style = stylesheet["Heading1"])
+    Story.append(dip)
     Story.append(make_relation_section(nation["diplomacy"]))
     Story.append(PageBreak())
 
@@ -149,6 +154,10 @@ def make_relation_section(relations):
             data.append((curr_nation_name, relations[i]))
 
     relations_table = Table(data)
+    relations_table.setStyle(TableStyle([
+        ('BOX', (0,0), (-1,-1), 1, (0, 0, 0)),
+        ('INNERGRID', (0,0), (-1, -1), 2, (0,255,0))
+        ]))
     return relations_table
 
 
