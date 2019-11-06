@@ -9,7 +9,7 @@ from pathlib import Path
 index = {}
 pageNum = 0
 DESCENDERS = ["g", "j", "p", "y"]
-doc = SimpleDocTemplate("demo3.pdf",
+doc = SimpleDocTemplate("demo.pdf",
                         rightMargin=72,leftMargin=72,
                         topMargin=72,bottomMargin=18)
 
