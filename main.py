@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from fpdf import FPDF
 from fpdf.html import hex2dec as h2d
 import pandas as pd
